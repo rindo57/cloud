@@ -8,12 +8,12 @@ db = client["techzcloud"]
 filesdb = db["files"]
 print("Connected to database...")
 
-def save_file_in_db(filename, hash, msg_id=None):
+def save_file_in_db(filename, hash, msg_id=None, filenamex):
     filesdb.update_one(
         {
             "hash": hash,
         },
-        {"$set": {"filename": filename, "msg_id": msg_id}},
+        {"$set": {"filename": filename,"filenamex": filenamex, "msg_id": msg_id}},
         upsert=True,
     )
 
