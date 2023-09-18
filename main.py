@@ -150,8 +150,8 @@ async def download(request: web.Request):
     hash = request.match_info["hash"]
     id = is_hash_in_db(hash)
     if id:
-        id = id["msg_id"]
         fname = id["filename"]
+        id = id["msg_id"]
         return await media_streamer(request, id, fname)
 
 
