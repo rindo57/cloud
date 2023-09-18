@@ -1,0 +1,6 @@
+aiohttp
+pyrogram
+pymongo
+tgcrypto
+werkzeug
+aiofiles
