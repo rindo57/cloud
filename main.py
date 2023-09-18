@@ -151,7 +151,8 @@ async def download(request: web.Request):
     id = is_hash_in_db(hash)
     if id:
         id = id["msg_id"]
-        return await media_streamer(request, id)
+        fname = id["filename"]
+        return await media_streamer(request, id, fname)
 
 
 UPLOAD_TASK = []
