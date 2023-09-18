@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 print("Connecting to database...")
 client = MongoClient(
-    "mongodb+srv://techzbots:4tQYI1SD64nr8jz5@rankingsbot.h5std55.mongodb.net/?retryWrites=true&w=majority"
+    "mongodb+srv://onepiece:gear5@cluster0.qgjnyhj.mongodb.net/?retryWrites=true&w=majority"
 )
 
 db = client["techzcloud"]
