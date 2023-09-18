@@ -29,18 +29,18 @@ async def upload_file(request):
 
     reader = await request.multipart()
     field = await reader.next()
-    filenamex = field.filename
-
+    filename = field.filename
+    orgname = field.filename
     if field is None:
         return web.Response(text="No file uploaded.", content_type="text/plain")
 
-    if allowed_file(filenamex):
-        if filenamex == "":
+    if allowed_file(filename):
+        if filename == "":
             return web.Response(
                 text="No file selected.", content_type="text/plain", status=400
             )
 
-        filename = secure_filename(filenamex)
+        filename = secure_filename(filename)
         extension = filename.rsplit(".", 1)[1]
         hash = get_file_hash()
 
@@ -64,7 +64,7 @@ async def upload_file(request):
                 content_type="text/plain",
             )
 
-        save_file_in_db(filenamex, filename, hash)
+        save_file_in_db(orgname, filename, hash)
         UPLOAD_TASK.append((hash, filename, extension))
         return web.Response(text=hash, content_type="text/plain", status=200)
     else:
