@@ -14,7 +14,7 @@ multi_clients = {}  # {0: client1, 1: client2, 2: client3}
 work_loads = {}  # {0: 0, 1: 0, 2: 0}
 
 
-async def media_streamer(request, message_id: int):
+async def media_streamer(request, message_id: int, fname: str):
     global class_cache, multi_clients, work_loads
 
     range_header = request.headers.get("Range", 0)
@@ -75,7 +75,7 @@ async def media_streamer(request, message_id: int):
     )
 
     mime_type = file_id.mime_type
-    file_name = get_name(file_id)
+    file_name = fname
     disposition = "attachment"
 
     if not mime_type:
