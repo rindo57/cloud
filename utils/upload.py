@@ -10,7 +10,7 @@ from utils.db import save_file_in_db
 PROGRESS = {}
 
 
-async def upload_file_to_channel(hash, filename, extension):
+async def upload_file_to_channel(hash, filename, extension, orgname):
     global PROGRESS, multi_clients, work_loads
 
     index = min(work_loads, key=work_loads.get)
@@ -22,11 +22,11 @@ async def upload_file_to_channel(hash, filename, extension):
     file = await app.send_document(
         -1001895203720,
         f"static/uploads/{hash}.{extension}",
-        caption=f"{hash} | {filename}",
+        caption=f"{hash} | {orgname}",
         progress=upload_progress,
         progress_args=(hash,),
     )
-    save_file_in_db(filename, hash, file.id)
+    save_file_in_db(orgname, filename, hash, file.id)
     work_loads[index] -= 1
 
     PROGRESS[hash]["message"] = file.id
