@@ -13,7 +13,7 @@ def save_file_in_db(orgname, filename, hash, msg_id=None):
         {
             "hash": hash,
         },
-        {"$set": {"filename": filename,"filenamex": orgname, "msg_id": msg_id}},
+        {"$set": {"filename": filename, "filenamex": orgname, "msg_id": msg_id}},
         upsert=True,
     )
 
