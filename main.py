@@ -29,18 +29,18 @@ async def upload_file(request):
 
     reader = await request.multipart()
     field = await reader.next()
-    filename = field.filename
+    filenamex = field.filename
 
     if field is None:
         return web.Response(text="No file uploaded.", content_type="text/plain")
 
-    if allowed_file(filename):
-        if filename == "":
+    if allowed_file(filenamex):
+        if filenamex == "":
             return web.Response(
                 text="No file selected.", content_type="text/plain", status=400
             )
 
-        filename = secure_filename(filename)
+        filename = secure_filename(filenamex)
         extension = filename.rsplit(".", 1)[1]
         hash = get_file_hash()
 
@@ -64,7 +64,7 @@ async def upload_file(request):
                 content_type="text/plain",
             )
 
-        save_file_in_db(filename, hash)
+        save_file_in_db(filename, hash, filenamex)
         UPLOAD_TASK.append((hash, filename, extension))
         return web.Response(text=hash, content_type="text/plain", status=200)
     else:
@@ -150,7 +150,7 @@ async def download(request: web.Request):
     hash = request.match_info["hash"]
     id = is_hash_in_db(hash)
     if id:
-        fname = id["filename"]
+        fname = id["filenamex"]
         id = id["msg_id"]
         return await media_streamer(request, id, fname)
 
