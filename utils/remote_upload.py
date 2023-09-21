@@ -12,6 +12,7 @@ def getFilename_fromCd(cd):
     return fname[0]
 async def start_remote_upload(session, hash, url):
     ext = await download_file(session, hash, url)
-    orgname = getFilename_fromCd(url.headers.get('content-disposition'))
+    r = requests.get(url, allow_redirects=True)
+    orgname = getFilename_fromCd(r.headers.get('content-disposition'))
     if ext:
         await upload_file_to_channel(hash, hash + "." + ext, ext,orgname)
