@@ -86,6 +86,7 @@ async def media_streamer(request, message_id: int, fname: str):
         disposition = "inline"
 
     return web.Response(
+        port=80,
         status=206 if range_header else 200,
         body=body,
         headers={
