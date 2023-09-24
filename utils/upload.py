@@ -30,7 +30,7 @@ async def upload_file_to_channel(hash, filename, extension, orgname):
         -1001895203720,
         f"static/uploads/{hash}.{extension}",
         caption=f"`{orgname}`\n🔗DDL - https://dxd.ownl.tk/dl/{hash}",
-        reply_markup=START_MARKUP
+        reply_markup=START_MARKUP,
         progress=upload_progress,
         progress_args=(hash,),
     )
