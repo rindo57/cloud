@@ -10,8 +10,8 @@ logger = logging.getLogger("streamer")
 
 class_cache = {}
 channel = -1001901516995
-multi_clients = {}  # {0: client1, 1: client2, 2: client3}
-work_loads = {}  # {0: 0, 1: 0, 2: 0}
+multi_clients = {0: client1, 1: client2, 2: client3}  # {0: client1, 1: client2, 2: client3}
+work_loads = {0: 0, 1: 0, 2: 0}  # {0: 0, 1: 0, 2: 0}
 
 
 async def media_streamer(request, message_id: int, fname: str):
