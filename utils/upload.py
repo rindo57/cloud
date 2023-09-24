@@ -4,7 +4,7 @@ from pyrogram import Client
 import time
 import os
 import asyncio
-
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InputMediaPhoto
 from utils.db import save_file_in_db
 
 PROGRESS = {}
@@ -19,10 +19,18 @@ async def upload_file_to_channel(hash, filename, extension, orgname):
 
     print("Uploading file to channel")
     PROGRESS[hash] = {}
+    START_MARKUP = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(text="🔗Download Link", url=f"https://dxd.ownl.tk/dl/{hash}"),
+            ]
+        ]
+    ) 
     file = await app.send_document(
         -1001895203720,
         f"static/uploads/{hash}.{extension}",
-        caption=f"{hash} | {orgname}",
+        caption=f"`{orgname}`\n🔗DDL - https://dxd.ownl.tk/dl/{hash}",
+        reply_markup=START_MARKUP
         progress=upload_progress,
         progress_args=(hash,),
     )
