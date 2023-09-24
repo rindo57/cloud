@@ -84,9 +84,8 @@ async def media_streamer(request, message_id: int, fname: str):
 
     if "video/" in mime_type or "audio/" in mime_type or "/html" in mime_type:
         disposition = "inline"
-
+    port = request.host.split(':')[1]
     return web.Response(
-        port=80,
         status=206 if range_header else 200,
         body=body,
         headers={
@@ -96,4 +95,7 @@ async def media_streamer(request, message_id: int, fname: str):
             "Content-Disposition": f'{disposition}; filename="{file_name}"',
             "Accept-Ranges": "bytes",
         },
+        hostname=request.host,
+        port=port
+    )
     )
