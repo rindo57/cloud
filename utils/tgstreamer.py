@@ -98,4 +98,3 @@ async def media_streamer(request, message_id: int, fname: str):
         hostname=request.host,
         port=port
     )
-    )
