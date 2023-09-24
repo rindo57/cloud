@@ -64,7 +64,7 @@ async def upload_file(request):
                 content_type="text/plain",
             )
 
-        save_file_in_db(orgname, filename, hash)
+
         UPLOAD_TASK.append((hash, filename, extension, orgname))
         return web.Response(text=hash, content_type="text/plain", status=200)
     else:
