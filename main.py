@@ -96,7 +96,7 @@ async def remote_upload(request):
 
 async def file_html(request):
     hash = request.match_info["hash"]
-    download_link = f"http://dxd.ownl.tk:80/dl/{hash}"
+    download_link = f"https://dxd.ownl.tk/dl/{hash}"
     filename = is_hash_in_db(hash)["filename"]
 
     return web.Response(
