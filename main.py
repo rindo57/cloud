@@ -1,5 +1,6 @@
 from utils.download import DL_STATUS
 import aiohttp
+import base64
 from config import *
 from utils.remote_upload import start_remote_upload
 from utils.tgstreamer import work_loads, multi_clients
