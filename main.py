@@ -185,6 +185,44 @@ async def generate_clients():
         multi_clients[i] = bot
         work_loads[i] = 0
         print(f"Client {i} generated")
+@app.on_message(
+    filters.private
+    & (
+        filters.document
+        | filters.video
+        | filters.audio
+    ),
+    group=4,
+)
+async def main(client, message):
+    user_id = message.from_user.id
+    anidl_ch = -1001895203720
+    msg_id = int(message.id)
+    file_info = app.get_file(msg_id)
+    filename = file_info.file_name
+    filenam = file_info.file_name
+    hash = "".join([random.choice(ascii_letters + digits) for n in range(10)])
+    dl_markup = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(text="Download Link", url=f"https://dxd.ownl.tk/dl/{hash}")
+            ]
+        ]
+    )
+    save_file_in_db(filename, filenam, hash, msg_id)
+    await app.copy_message(
+        chat_id=anidl_ch,
+        from_chat_id=user_id,
+        message_id=msg_id,
+        reply_markup=dl_markup
+    )
+    
+
+    mention = update.from_user.mention()
+    un = f"@{update.from_user.username}"
+    userfile = update.id
+    usm = tax.text.split("\n")[1].split(": ")[1]
+    wru = int(usm)
 
 
 async def start_server():
