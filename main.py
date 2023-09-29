@@ -251,6 +251,7 @@ async def main(client, message):
 
 
 async def start_server():
+    global aiosession
     print("Starting Server")
     delete_cache()
 
