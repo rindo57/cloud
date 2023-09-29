@@ -13,14 +13,24 @@ from utils.file import allowed_file, delete_cache, get_file_hash
 from utils.tgstreamer import media_streamer
 from utils.upload import upload_file_to_channel
 from utils.upload import PROGRESS
+from aiohttp_basic_auth import BasicAuthMiddleware
 import random
 from string import ascii_letters, digits
 
 from aiohttp import web
 
-app = web.Application()
+users = {"anidl": "anidl@2023#"}
+auth_middleware = BasicAuthMiddleware(
+    auth_type="basic",
+    auth_realm="Restricted Area",
+    credentials=users,
+)
+app = web.Application(middlewares=[auth_middleware])
 bot = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="6589016965:AAHrSOQcW00NGba3onsSfdNPyEdeTU2elVE")
+async def protected_handler(request):
+    return web.Response(text="This URL is protected.")
 
+ 
 def render_template(name):
     with open(f"templates/{name}") as f:
         return f.read()
@@ -226,7 +236,7 @@ async def start_server():
     print("Starting Server")
     delete_cache()
 
-    app.router.add_get("/", home)
+    app.router.add_get("/", protected_handler)
     app.router.add_get("/static/{file}", static_files)
     app.router.add_get("/dl/{hash}", download)
     app.router.add_get("/file/{hash}", file_html)
