@@ -42,7 +42,7 @@ async def home(_):
 app.middlewares.append(basic_auth_middleware)
 bot = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="6589016965:AAHrSOQcW00NGba3onsSfdNPyEdeTU2elVE")
 async def protected_handler(request):
-    return home
+    return web.Response(text=render_template("minindex.html"), content_type="text/html")
 
  
 def render_template(name):
