@@ -36,12 +36,13 @@ async def basic_auth_middleware(app, handler):
 
     return middleware_handler
 app = web.Application()
-
+async def home(_):
+    return web.Response(text=render_template("minindex.html"), content_type="text/html")
 # Apply the basic authentication middleware
 app.middlewares.append(basic_auth_middleware)
 bot = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="6589016965:AAHrSOQcW00NGba3onsSfdNPyEdeTU2elVE")
 async def protected_handler(request):
-    return web.Response(text="This URL is protected.")
+    return home
 
  
 def render_template(name):
@@ -98,8 +99,7 @@ async def upload_file(request):
         )
 
 
-async def home(_):
-    return web.Response(text=render_template("minindex.html"), content_type="text/html")
+
 
 async def bot_status(_):
     json = work_loads
