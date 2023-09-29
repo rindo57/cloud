@@ -211,7 +211,7 @@ async def main(client, message):
             ]
         ]
     )
-    taku = await app.copy_message(
+    taku = await bot.copy_message(
         chat_id=anidl_ch,
         from_chat_id=user_id,
         message_id=msg_id,
