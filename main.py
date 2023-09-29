@@ -4,6 +4,7 @@ from config import *
 from utils.remote_upload import start_remote_upload
 from utils.tgstreamer import work_loads, multi_clients
 import asyncio
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InputMediaPhoto
 from pyrogram import Client, idle, filters
 from werkzeug.utils import secure_filename
 import os
