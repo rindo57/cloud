@@ -20,7 +20,7 @@ from string import ascii_letters, digits
 from aiohttp import web
 
 users = {"anidl": "anidl@2023#"}
-async def basic_auth_middleware(app, handler, request):
+async def basic_auth_middleware(app, handler):
     async def middleware_handler(request):
         auth_header = request.headers.get("Authorization")
         if auth_header is None or not auth_header.startswith("Basic "):
@@ -39,7 +39,7 @@ async def basic_auth_middleware(app, handler, request):
 async def conditional_auth_middleware(app, handler):
     async def middleware_handler(request):
         if request.path == "/":
-            return await basic_auth_middleware(app, handler, request)
+            return await basic_auth_middleware(app, handler)(request)
         else:
             return await handler(request)
 
