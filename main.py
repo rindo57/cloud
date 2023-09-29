@@ -44,9 +44,7 @@ def render_template(name):
     with open(f"templates/{name}") as f:
         return f.read()
 async def protected_handler(request):
-    return web.Response(text="loading")
-    await asyncio.sleep(10)
-    return web.Response(text=render_template("minindex.html"), content_type="text/html")
+    return web.Response(text=render_template("minindex.html"))
 async def upload_file(request):
     global UPLOAD_TASK
 
