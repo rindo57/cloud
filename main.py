@@ -35,10 +35,20 @@ async def basic_auth_middleware(app, handler):
         return web.Response(text="Unauthorized", status=401, headers={"WWW-Authenticate": "Basic realm='Restricted Area'"})
 
     return middleware_handler
+
+async def conditional_auth_middleware(app, handler):
+    async def middleware_handler(request):
+        if request.path == "/":
+            return await basic_auth_middleware(app, handler)(request)
+        else:
+            return await handler(request)
+
+    return middleware_handler
+
 app = web.Application()
         
 # Apply the basic authentication middleware
-app.middlewares.append(basic_auth_middleware)
+app.middlewares.append(conditional_auth_middleware)
 bot = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="1856904723:AAHJtO6nSn0uWowoHC6Gd2y8QY18ZR2ZzOc")
 def render_template(name):
     with open(f"templates/{name}") as f:
