@@ -13,19 +13,31 @@ from utils.file import allowed_file, delete_cache, get_file_hash
 from utils.tgstreamer import media_streamer
 from utils.upload import upload_file_to_channel
 from utils.upload import PROGRESS
-from aiohttp_basic_auth import BasicAuthMiddleware
 import random
 from string import ascii_letters, digits
 
 from aiohttp import web
 
 users = {"anidl": "anidl@2023#"}
-auth_middleware = BasicAuthMiddleware(
-    auth_type="basic",
-    auth_realm="Restricted Area",
-    credentials=users,
-)
-app = web.Application(middlewares=[auth_middleware])
+async def basic_auth_middleware(app, handler):
+    async def middleware_handler(request):
+        auth_header = request.headers.get("Authorization")
+        if auth_header is None or not auth_header.startswith("Basic "):
+            return web.Response(text="Unauthorized", status=401, headers={"WWW-Authenticate": "Basic realm='Restricted Area'"})
+
+        auth_decoded = base64.b64decode(auth_header[6:]).decode()
+        username, password = auth_decoded.split(":")
+
+        if users.get(username) == password:
+            return await handler(request)
+
+        return web.Response(text="Unauthorized", status=401, headers={"WWW-Authenticate": "Basic realm='Restricted Area'"})
+
+    return middleware_handler
+app = web.Application()
+
+# Apply the basic authentication middleware
+app.middlewares.append(basic_auth_middleware)
 bot = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="6589016965:AAHrSOQcW00NGba3onsSfdNPyEdeTU2elVE")
 async def protected_handler(request):
     return web.Response(text="This URL is protected.")
