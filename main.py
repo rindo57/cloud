@@ -214,7 +214,7 @@ async def main(client, message):
     taku = await bot.copy_message(
         chat_id=anidl_ch,
         from_chat_id=user_id,
-        message_id=msg_id,
+        message_id=mssg_id,
         reply_markup=dl_markup
     )
     msg_id=int(taku.id)
