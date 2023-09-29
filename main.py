@@ -199,8 +199,8 @@ async def generate_clients():
 async def main(client, message):
     user_id = message.from_user.id
     anidl_ch = -1001895203720
-    msg_id = int(message.id)
-    file_info = await client.get_messages(chat_id=user_id, message_ids=msg_id)
+    mssg_id = int(message.id)
+    file_info = await client.get_messages(chat_id=user_id, message_ids=mssg_id)
     filename = file_info.document.file_name
     filenam = file_info.document.file_name
     hash = "".join([random.choice(ascii_letters + digits) for n in range(10)])
@@ -211,13 +211,14 @@ async def main(client, message):
             ]
         ]
     )
-    save_file_in_db(filename, filenam, hash, msg_id)
-    await bot.copy_message(
+    taku = await app.copy_message(
         chat_id=anidl_ch,
         from_chat_id=user_id,
         message_id=msg_id,
         reply_markup=dl_markup
     )
+    msg_id=int(taku.id)
+    save_file_in_db(filename, filenam, hash, msg_id)
     
 
 
