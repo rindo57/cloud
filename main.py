@@ -39,7 +39,7 @@ app = web.Application()
         
 # Apply the basic authentication middleware
 app.middlewares.append(basic_auth_middleware)
-bot = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="6589016965:AAHrSOQcW00NGba3onsSfdNPyEdeTU2elVE")
+bot = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="1856904723:AAHJtO6nSn0uWowoHC6Gd2y8QY18ZR2ZzOc")
 def render_template(name):
     with open(f"templates/{name}") as f:
         return f.read()
