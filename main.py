@@ -20,30 +20,26 @@ from string import ascii_letters, digits
 from aiohttp import web
 
 users = {"anidl": "anidl@2023#"}
-async def basic_auth_middleware(app, handler):
-    async def middleware_handler(request):
-        auth_header = request.headers.get("Authorization")
-        if auth_header is None or not auth_header.startswith("Basic "):
-            return web.Response(text="Unauthorized", status=401, headers={"WWW-Authenticate": "Basic realm='Restricted Area'"})
 
-        auth_decoded = base64.b64decode(auth_header[6:]).decode()
-        username, password = auth_decoded.split(":")
-
-        if users.get(username) == password:
-            return await handler(request)
-
+async def basic_auth_middleware(request, handler):
+    auth_header = request.headers.get("Authorization")
+    if auth_header is None or not auth_header.startswith("Basic "):
         return web.Response(text="Unauthorized", status=401, headers={"WWW-Authenticate": "Basic realm='Restricted Area'"})
 
-    return middleware_handler
+    auth_decoded = base64.b64decode(auth_header[6:]).decode()
+    username, password = auth_decoded.split(":")
 
-async def conditional_auth_middleware(app, handler):
-    async def middleware_handler(request):
-        if request.path == "/":
-            return await basic_auth_middleware(app, handler)(request)
-        else:
-            return await handler(request)
+    if users.get(username) == password:
+        return await handler(request)
 
-    return middleware_handler
+    return web.Response(text="Unauthorized", status=401, headers={"WWW-Authenticate": "Basic realm='Restricted Area'"})
+
+
+async def conditional_auth_middleware(request, handler):
+    if request.path == "/":
+        return await basic_auth_middleware(request, handler)
+    else:
+        return await handler(request)
 
 app = web.Application()
         
