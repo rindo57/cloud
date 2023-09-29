@@ -246,7 +246,7 @@ async def start_server():
     loop.create_task(upload_task_spawner())
     print("Starting Client Generator")
     loop.create_task(generate_clients())
-
+    await bot.start()
     await server.setup()
     print("Server Started")
     await web.TCPSite(server, port=80).start()
