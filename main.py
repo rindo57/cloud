@@ -4,7 +4,7 @@ from config import *
 from utils.remote_upload import start_remote_upload
 from utils.tgstreamer import work_loads, multi_clients
 import asyncio
-from pyrogram import Client, idle
+from pyrogram import Client, idle, filters
 from werkzeug.utils import secure_filename
 import os
 from utils.db import is_hash_in_db, save_file_in_db
