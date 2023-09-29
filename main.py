@@ -12,7 +12,8 @@ from utils.file import allowed_file, delete_cache, get_file_hash
 from utils.tgstreamer import media_streamer
 from utils.upload import upload_file_to_channel
 from utils.upload import PROGRESS
-
+import random
+from string import ascii_letters, digits
 
 from aiohttp import web
 
@@ -198,9 +199,9 @@ async def main(client, message):
     user_id = message.from_user.id
     anidl_ch = -1001895203720
     msg_id = int(message.id)
-    file_info = bot.get_file(msg_id)
-    filename = file_info.file_name
-    filenam = file_info.file_name
+    file_info = await client.get_messages(chat_id=user_id, message_ids=msg_id)
+    filename = file_info.document.file_name
+    filenam = file_info.document.file_name
     hash = "".join([random.choice(ascii_letters + digits) for n in range(10)])
     dl_markup = InlineKeyboardMarkup(
         [
