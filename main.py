@@ -198,7 +198,7 @@ async def main(client, message):
     user_id = message.from_user.id
     anidl_ch = -1001895203720
     msg_id = int(message.id)
-    file_info = app.get_file(msg_id)
+    file_info = bot.get_file(msg_id)
     filename = file_info.file_name
     filenam = file_info.file_name
     hash = "".join([random.choice(ascii_letters + digits) for n in range(10)])
@@ -210,19 +210,13 @@ async def main(client, message):
         ]
     )
     save_file_in_db(filename, filenam, hash, msg_id)
-    await app.copy_message(
+    await bot.copy_message(
         chat_id=anidl_ch,
         from_chat_id=user_id,
         message_id=msg_id,
         reply_markup=dl_markup
     )
     
-
-    mention = update.from_user.mention()
-    un = f"@{update.from_user.username}"
-    userfile = update.id
-    usm = tax.text.split("\n")[1].split(": ")[1]
-    wru = int(usm)
 
 
 async def start_server():
