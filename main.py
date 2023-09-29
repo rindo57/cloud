@@ -17,7 +17,7 @@ from utils.upload import PROGRESS
 from aiohttp import web
 
 app = web.Application()
-
+bot = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="6589016965:AAHrSOQcW00NGba3onsSfdNPyEdeTU2elVE")
 
 def render_template(name):
     with open(f"templates/{name}") as f:
@@ -185,7 +185,7 @@ async def generate_clients():
         multi_clients[i] = bot
         work_loads[i] = 0
         print(f"Client {i} generated")
-@app.on_message(
+@bot.on_message(
     filters.private
     & (
         filters.document
