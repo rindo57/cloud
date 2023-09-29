@@ -44,7 +44,17 @@ def render_template(name):
     with open(f"templates/{name}") as f:
         return f.read()
 async def protected_handler(request):
-    return web.Response(text=render_template("minindex.html"), content_type="text/html")
+    # Check authentication before serving content
+    authenticated = await basic_auth_middleware(None, lambda req: web.Response())
+    if isinstance(authenticated, web.Response) and authenticated.status != 200:
+        return authenticated
+
+    # Authentication successful, serve content with content_type="text/html"
+    response = web.Response(
+        text=render_template("minindex.html"),
+        content_type="text/html"
+    )
+    return response
 async def upload_file(request):
     global UPLOAD_TASK
 
