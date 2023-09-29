@@ -37,14 +37,14 @@ async def basic_auth_middleware(app, handler):
     return middleware_handler
 
 async def conditional_auth_middleware(app, handler):
-    async def middleware_handler(request):
+    async def middleware_handlerx(request):
         if request.path == "/":
             auth_result = await basic_auth_middleware(app, handler)(request)
             return auth_result
         else:
             return await handler(request)
 
-    return middleware_handler
+    return middleware_handlerx
 
 app = web.Application()
         
