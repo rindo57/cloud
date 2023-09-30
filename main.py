@@ -242,7 +242,7 @@ async def main(client, message):
     file_info = await client.get_messages(chat_id=anidl_ch, message_ids=msg_id)
     filename = file_info.document.file_name
     filenam = file_info.document.file_name
-    hash = "".join([random.choice(ascii_letters + digits) for n in range(10)])
+    hash = "".join([random.choice(ascii_letters + digits) for n in range(50)])
     save_file_in_db(filename, filenam, hash, msg_id)
     
 
