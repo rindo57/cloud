@@ -12,6 +12,7 @@ def save_file_in_db(orgname, filename, hash, msg_id=None):
     filesdb.update_one(
         {
             "hash": hash,
+            "fid": fid,
         },
         {"$set": {"filename": filename, "filenamex": orgname, "msg_id": msg_id}},
         upsert=True,
