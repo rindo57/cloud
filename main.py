@@ -50,7 +50,7 @@ app = web.Application()
         
 # Apply the basic authentication middleware
 app.middlewares.append(conditional_auth_middleware)
-bot = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="1856904723:AAHJtO6nSn0uWowoHC6Gd2y8QY18ZR2ZzOc")
+bot = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="5222572158:AAENHtTOnhWBh4UUZKTjq5ruMtil_4zRA_0")
 def render_template(name):
     with open(f"templates/{name}") as f:
         return f.read()
@@ -227,7 +227,7 @@ async def generate_clients():
         work_loads[i] = 0
         print(f"Client {i} generated")
 @bot.on_message(
-    filters.private
+    filters.channel(-1001642923224)
     & (
         filters.document
         | filters.video
@@ -236,27 +236,13 @@ async def generate_clients():
     group=4,
 )
 async def main(client, message):
-    user_id = message.from_user.id
-    anidl_ch = -1001895203720
-    mssg_id = int(message.id)
-    file_info = await client.get_messages(chat_id=user_id, message_ids=mssg_id)
+    anidl_ch = -1001642923224
+    msg_id = int(message.id)
+    strmsg_id = str(message.id)
+    file_info = await client.get_messages(chat_id=anidl_ch, message_ids=msg_id)
     filename = file_info.document.file_name
     filenam = file_info.document.file_name
     hash = "".join([random.choice(ascii_letters + digits) for n in range(10)])
-    dl_markup = InlineKeyboardMarkup(
-        [
-            [
-                InlineKeyboardButton(text="Download Link", url=f"https://dxd.ownl.tk/dl/{hash}")
-            ]
-        ]
-    )
-    taku = await bot.copy_message(
-        chat_id=anidl_ch,
-        from_chat_id=user_id,
-        message_id=mssg_id,
-        reply_markup=dl_markup
-    )
-    msg_id=int(taku.id)
     save_file_in_db(filename, filenam, hash, msg_id)
     
 
