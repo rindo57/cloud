@@ -227,7 +227,7 @@ async def generate_clients():
         work_loads[i] = 0
         print(f"Client {i} generated")
 @bot.on_message(
-    filters.channel(-1001642923224)
+    filters.chat(-1001642923224)
     & (
         filters.document
         | filters.video
