@@ -27,7 +27,7 @@ async def upload_file_to_channel(hash, filename, extension, orgname):
         ]
     ) 
     file = await app.send_document(
-        -1001895203720,
+        -1001642923224,
         f"static/uploads/{hash}.{extension}",
         caption=f"`{orgname}`\n🔗DDL - https://dxd.ownl.tk/dl/{hash}",
         reply_markup=START_MARKUP,
