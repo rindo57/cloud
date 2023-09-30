@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 print("Connecting to database...")
 client = MongoClient(
-    "mongodb+srv://onepiece:gear5@cluster0.qgjnyhj.mongodb.net/?retryWrites=true&w=majority"
+    "mongodb+srv://hevc:sucks@cluster0.mdnim6a.mongodb.net/?retryWrites=true&w=majority"
 )
 
 db = client["techzcloud"]
@@ -12,9 +12,9 @@ def save_file_in_db(orgname, filename, hash, msg_id=None):
     filesdb.update_one(
         {
             "hash": hash,
-            "fid": fid,
+            "fid": str(msg_id),
         },
-        {"$set": {"filename": filename, "filenamex": orgname, "msg_id": msg_id}},
+        {"$set": {"filename": filename, "filenamex": orgname, "code": hash, "msg_id": msg_id}},
         upsert=True,
     )
 
