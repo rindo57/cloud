@@ -51,7 +51,7 @@ app = web.Application()
 # Apply the basic authentication middleware
 app.middlewares.append(conditional_auth_middleware)
 bot = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="5222572158:AAENHtTOnhWBh4UUZKTjq5ruMtil_4zRA_0")
-goat = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="5222572158:AAENHtTOnhWBh4UUZKTjq5ruMtil_4zRA_0")
+goat = Client("ani", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="6470885647:AAFYGV4BXW0FY4ZspL4lHJ-hlM4-j72xERA")
 
 def render_template(name):
     with open(f"templates/{name}") as f:
