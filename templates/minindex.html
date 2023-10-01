@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AniDL Cloud</title>
+  <title>TechZCloud</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous" />
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
@@ -50,6 +50,16 @@
       color: white;
       border: none;
     }
+    ul.list-group {
+      background-color: black;
+      color: white;
+      border-color: white;
+      list-style-type: decimal;
+      padding-left: 20px;
+    }
+    .form-control::placeholder {
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -58,7 +68,7 @@
     <div id="navbar" class="container container-fluid">
       <a class="navbar-brand d-flex align-items-center" href="/">
         <img src="/static/logo.png" alt="Bootstrap" width="40" height="40" class="d-inline-block align-text-top">
-        <span style="margin-left: 10px" class="navbar-brand mb-0 h1">AniDL Cloud</span>
+        <span style="margin-left: 10px" class="navbar-brand mb-0 h1">TechZCloud</span>
       </a>
     </div>
   </nav>
@@ -119,8 +129,22 @@
     </div>
   </div>
 
-  <!-- Rest of your content -->
-  <!-- ... -->
+  <!-- Site Info -->
+  <div id="site-info-outer" class="py-5 pt-3">
+    <div id="site-info" class="d-flex justify-content-center p-3">
+      <div>
+        <h4>Features:</h4>
+        <ul class="list-group list list-group-numbered mx-4">
+          <li class="list-group-item">Upload files up to 2GB</li>
+          <li class="list-group-item">Upload files directly from your device</li>
+          <li class="list-group-item">Upload files from direct download links</li>
+          <li class="list-group-item">Free File Hosting, Upload Unlimited Files</li>
+          <li class="list-group-item">Download files with high speed</li>
+          <li class="list-group-item">Links don't expire</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
 </body>
 <script src="../static/index.js"></script>
