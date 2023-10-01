@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 import os
 from utils.db import is_hash_in_db, save_file_in_db
 from utils.file import allowed_file, delete_cache, get_file_hash
-from utils.tgstreamer import media_streamer
+from utils.tgstreamer import media_streamer, media_streamerx
 from utils.upload import upload_file_to_channel
 from utils.upload import PROGRESS
 import random
@@ -51,6 +51,8 @@ app = web.Application()
 # Apply the basic authentication middleware
 app.middlewares.append(conditional_auth_middleware)
 bot = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="5222572158:AAENHtTOnhWBh4UUZKTjq5ruMtil_4zRA_0")
+goat = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="5222572158:AAENHtTOnhWBh4UUZKTjq5ruMtil_4zRA_0")
+
 def render_template(name):
     with open(f"templates/{name}") as f:
         return f.read()
@@ -195,7 +197,14 @@ async def download(request: web.Request):
         id = id["msg_id"]
         return await media_streamer(request, id, fname)
 
-
+async def downloadx(request: web.Request):
+    hash = request.match_info["hash"]
+    id = is_hash_in_db(hash)
+    if id:
+        fname = id["filenamex"]
+        id = id["msg_id"]
+        return await media_streamerx(request, id, fname)
+        
 UPLOAD_TASK = []
 
 
@@ -245,7 +254,40 @@ async def main(client, message):
     hash = "".join([random.choice(ascii_letters + digits) for n in range(50)])
     save_file_in_db(filename, filenam, hash, msg_id)
     
+#anidl
 
+@goat.on_message(
+    filters.private
+    & (
+        filters.document
+        | filters.video
+        | filters.audio
+    ),
+    group=4,
+)
+async def main(client, message):
+    user_id = message.from_user.id
+    anidl_ch = -1001895203720
+    mssg_id = int(message.id)
+    file_info = await client.get_messages(chat_id=user_id, message_ids=mssg_id)
+    filename = file_info.document.file_name
+    filenam = file_info.document.file_name
+    hash = "".join([random.choice(ascii_letters + digits) for n in range(10)])
+    dl_markup = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(text="Download Link", url=f"https://dxd.ownl.tk/dl/{hash}")
+            ]
+        ]
+    )
+    taku = await bot.copy_message(
+        chat_id=anidl_ch,
+        from_chat_id=user_id,
+        message_id=mssg_id,
+        reply_markup=dl_markup
+    )
+    msg_id=int(taku.id)
+    save_file_in_db(filename, filenam, hash, msg_id)
 
 async def start_server():
     global aiosession
@@ -254,6 +296,7 @@ async def start_server():
 
     app.router.add_get("/", protected_handler)
     app.router.add_get("/static/{file}", static_files)
+    app.router.add_get("/beta/{hash}", download)
     app.router.add_get("/dl/{hash}", download)
     app.router.add_get("/file/{hash}", file_html)
     app.router.add_post("/upload", upload_file)
