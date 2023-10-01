@@ -42,13 +42,40 @@ class ByteStreamer:
             await self.generate_file_properties(message_id)
             logger.debug(f"Cached file properties for message with ID {message_id}")
         return self.cached_file_ids[message_id]
-
+    
+    async def get_file_properties(self, message_id: int) -> FileId:
+        """
+        Returns the properties of a media of a specific message in a FIleId class.
+        if the properties are cached, then it'll return the cached results.
+        or it'll generate the properties from the Message ID and cache them.
+        """
+        if message_id not in self.cached_file_ids:
+            await self.generate_file_propertiesx(message_id)
+            logger.debug(f"Cached file properties for message with ID {message_id}")
+        return self.cached_file_ids[message_id]
     async def generate_file_properties(self, message_id: int) -> FileId:
         """
         Generates the properties of a media file on a specific message.
         returns ths properties in a FIleId class.
         """
         file_id = await get_file_ids(self.client, -1001642923224, message_id)
+        logger.debug(
+            f"Generated file ID and Unique ID for message with ID {message_id}"
+        )
+        if not file_id:
+            logger.debug(f"Message with ID {message_id} not found")
+            raise Exception(f"File not found for message with ID {message_id}")
+
+        self.cached_file_ids[message_id] = file_id
+        logger.debug(f"Cached media message with ID {message_id}")
+        return self.cached_file_ids[message_id]
+
+    async def generate_file_propertiesx(self, message_id: int) -> FileId:
+        """
+        Generates the properties of a media file on a specific message.
+        returns ths properties in a FIleId class.
+        """
+        file_id = await get_file_ids(self.client, -1001895203720, message_id)
         logger.debug(
             f"Generated file ID and Unique ID for message with ID {message_id}"
         )
