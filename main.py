@@ -297,8 +297,8 @@ async def start_server():
 
     app.router.add_get("/", protected_handler)
     app.router.add_get("/static/{file}", static_files)
-    app.router.add_get("/beta/{hash}", download)
-    app.router.add_get("/dl/{hash}", downloadx)
+    app.router.add_get("/beta/{hash}", downloadx)
+    app.router.add_get("/dl/{hash}", download)
     app.router.add_get("/file/{hash}", file_html)
     app.router.add_post("/upload", upload_file)
     app.router.add_get("/process/{hash}", process)
