@@ -286,7 +286,7 @@ async def main(client, message):
         message_id=mssg_id,
         reply_markup=dl_markup
     )
-    send = await message.reply_text("File Name: `filenam`\n\nDownload Link: `https://tgddl.anidl.org/dl/{hash}`", reply_markup=dl_markup)
+    send = await message.reply_text(f"File Name: `{filenam}`\n\nDownload Link: `https://tgddl.anidl.org/dl/{hash}`", reply_markup=dl_markup)
     msg_id=int(taku.id)
     save_file_in_db(filename, filenam, hash, msg_id)
 
