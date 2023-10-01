@@ -272,11 +272,11 @@ async def main(client, message):
     file_info = await client.get_messages(chat_id=user_id, message_ids=mssg_id)
     filename = file_info.document.file_name
     filenam = file_info.document.file_name
-    hash = "".join([random.choice(ascii_letters + digits) for n in range(10)])
+    hash = "".join([random.choice(ascii_letters + digits) for n in range(100)])
     dl_markup = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(text="Download Link", url=f"https://dxd.ownl.tk/dl/{hash}")
+                InlineKeyboardButton(text="Download Link", url=f"https://tgddl.anidl.org/dl/{hash}")
             ]
         ]
     )
@@ -286,6 +286,7 @@ async def main(client, message):
         message_id=mssg_id,
         reply_markup=dl_markup
     )
+    send = await message.reply_text("File Name: `filenam`\n\nDownload Link: `https://tgddl.anidl.org/dl/{hash}`", reply_markup=dl_markup)
     msg_id=int(taku.id)
     save_file_in_db(filename, filenam, hash, msg_id)
 
