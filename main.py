@@ -280,7 +280,7 @@ async def main(client, message):
             ]
         ]
     )
-    taku = await bot.copy_message(
+    taku = await goat.copy_message(
         chat_id=anidl_ch,
         from_chat_id=user_id,
         message_id=mssg_id,
@@ -297,8 +297,8 @@ async def start_server():
 
     app.router.add_get("/", protected_handler)
     app.router.add_get("/static/{file}", static_files)
-    app.router.add_get("/beta/{hash}", downloadx)
-    app.router.add_get("/dl/{hash}", download)
+    app.router.add_get("/beta/{hash}", download)
+    app.router.add_get("/dl/{hash}", downloadx)
     app.router.add_get("/file/{hash}", file_html)
     app.router.add_post("/upload", upload_file)
     app.router.add_get("/process/{hash}", process)
