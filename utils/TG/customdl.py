@@ -43,7 +43,7 @@ class ByteStreamer:
             logger.debug(f"Cached file properties for message with ID {message_id}")
         return self.cached_file_ids[message_id]
     
-    async def get_file_properties(self, message_id: int) -> FileId:
+    async def get_file_propertiesx(self, message_id: int) -> FileId:
         """
         Returns the properties of a media of a specific message in a FIleId class.
         if the properties are cached, then it'll return the cached results.
@@ -53,7 +53,7 @@ class ByteStreamer:
             await self.generate_file_propertiesx(message_id)
             logger.debug(f"Cached file properties for message with ID {message_id}")
         return self.cached_file_ids[message_id]
-    async def generate_file_propertiesx(self, message_id: int) -> FileId:
+    async def generate_file_properties(self, message_id: int) -> FileId:
         """
         Generates the properties of a media file on a specific message.
         returns ths properties in a FIleId class.
