@@ -314,6 +314,7 @@ async def start_server():
     print("Starting Client Generator")
     loop.create_task(generate_clients())
     await bot.start()
+    await goat.start()
     await server.setup()
     print("Server Started")
     await web.TCPSite(server, port=80).start()
