@@ -44,15 +44,56 @@
     <div id="udiv-main" class="card mx-3 my-5 text-center p-2">
       <h4>Upload your file</h4>
       <div id="udiv-inner" class="card p-2">
-        <!-- Add your form content here -->
+        <div id="form-div">
+          <form id="upload-form" class="p-1">
+            <div class="form-group">
+              <label for="file-input">File Upload</label>
+              <input class="form-control" type="file" id="file-input" />
+            </div>
+            <h6>OR</h6>
+            <div class="form-group">
+              <label for="url-input">Remote Url Upload</label>
+              <input type="url" class="form-control" id="url-input" placeholder="Direct Download Link of File" />
+            </div>
+            <button type="submit" class="btn btn-primary mt-2 col-4" value="Upload">
+              Upload
+            </button>
+          </form>
+          <div style="display: none" class="progress-bar">
+            <div id="progress"></div>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Progress div -->
-    <div id="udiv2-main" class="card m-5 text-center p-2" style="display:  none;">
+    <div id="udiv2-main" class="card m-5 text-center p-2" style="display: none;">
       <h4 id="hstatus">Uploading...</h4>
       <div id="udiv-inner" class="card p-2">
-        <!-- Add your progress content here -->
+        <table class="table">
+          <tbody>
+            <tr>
+              <th scope="row">File Name</th>
+              <td id="vfile">File Name</td>
+            </tr>
+            <tr>
+              <th scope="row">Remaining Time</th>
+              <td id="vtime">Remaining Time</td>
+            </tr>
+            <tr>
+              <th scope="row">Progress</th>
+              <td id="vprog">Progress</td>
+            </tr>
+            <tr>
+              <th scope="row">Average Speed</th>
+              <td id="vspeed">Average Speed</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="progress-bar">
+          <div id="progressor"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -76,4 +117,4 @@
 </body>
 <script src="../static/index.js"></script>
 
-</html>
+          </html>
