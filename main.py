@@ -286,7 +286,7 @@ async def main(client, message):
         message_id=mssg_id,
         reply_markup=dl_markup
     )
-    send = await message.reply_text(f"File Name: `{filenam}`\n\nDownload Link: `https://tgddl.anidl.org/dl/{hash}`", reply_markup=dl_markup)
+    send = await message.reply_text(f"**File Name:** `{filenam}`\n\n**Download Link:** `https://tgddl.anidl.org/dl/{hash}`", reply_markup=dl_markup)
     msg_id=int(taku.id)
     save_file_in_db(filename, filenam, hash, msg_id)
 @goat.on_message(filters.command(["rename"]))
@@ -297,7 +297,7 @@ async def rename_doc(bot, update):
         file_name = update.text.split(" ", 1)
         repl = update.reply_to_message_id
         jar = await goat.get_messages(user_id, repl)
-        hax = jar.text.split("\n\n\n")[1].split(": ")[1]
+        hax = jar.text.split("\n\n")[1].split(": ")[1]
         print(hax)
         linkx = hax.replace("https://tgddl.anidl.org/dl/", "")
         idx = replace_is_hash_in_db(linkx, file_name)
@@ -307,7 +307,7 @@ async def rename_doc(bot, update):
             await goat.edit_message_text(
                 chat_id=user_id,
                 message_id=mesid,
-                text=f"File Name: `file_name`\n\nDownload Link: `https://tgddl.anidl.org/dl/{linkx}`", 
+                text=f"**File Name**: `file_name`\n\n**Download Link:** `https://tgddl.anidl.org/dl/{linkx}`", 
                 reply_markup=dl_markup
             )
             mid = idx["msg_id"]
