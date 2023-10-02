@@ -25,3 +25,14 @@ def is_hash_in_db(hash):
         return data
     else:
         return None
+
+
+def replace_is_hash_in_db(hash, file_name):
+    data = filesdb.find_one({"hash": hash})
+    if data:
+        fname = data["filenamex"]
+        filter = {"filenamex": fname}
+        update = {"$set": {"filenamex": file_name}}
+        result = filesdb.update_one(filter, update)
+    else:
+        pass
