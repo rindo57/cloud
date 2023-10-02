@@ -319,9 +319,9 @@ async def rename_doc(bot, update):
             )
             mid = idx["msg_id"]
             await goat.edit_message_caption(
-                chat_id=1895203720,
-                message_id=mid,
-                caption=fxname
+                chat_id=-1001895203720,
+                message_id=int(mid),
+                caption=f"`fxname`"
             )
     else:
         update.reply_text("reply to any link I sent with a new file name ~ example: '/rename Naruto - 01'.mkv")
