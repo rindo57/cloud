@@ -313,7 +313,7 @@ async def rename_doc(bot, update):
             fxname = idx["filenamex"]
             await goat.edit_message_text(
                 chat_id=user_id,
-                message_id=mesid,
+                message_id=repl,
                 text=f"**File Name**: `file_name`\n\n**Download Link:** `https://tgddl.anidl.org/dl/{linkx}`", 
                 reply_markup=dl_xmarkup
             )
