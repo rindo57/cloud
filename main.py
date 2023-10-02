@@ -294,7 +294,7 @@ async def rename_doc(bot, update):
     if (" " in update.text) and (update.reply_to_message is not None):
         user_id = update.from_user.id
         mesid = update.id
-        file_name = update.text.split(" ", 1)
+        file_name = " ".join(update.command[1:])
         repl = update.reply_to_message_id
         jar = await goat.get_messages(user_id, repl)
         hax = jar.text.split("\n\n")[1].split(": ")[1]
@@ -302,13 +302,20 @@ async def rename_doc(bot, update):
         linkx = hax.replace("https://tgddl.anidl.org/dl/", "")
         idx = replace_is_hash_in_db(linkx, file_name)
         await update.reply_text("Your file has successfully been renamed.")
+        dl_xmarkup = InlineKeyboardMarkup(
+            [
+                [
+                InlineKeyboardButton(text="🔗 Download Link", url=hax)
+                ]
+            ]
+        )
         if idx:
             fxname = idx["filenamex"]
             await goat.edit_message_text(
                 chat_id=user_id,
                 message_id=mesid,
                 text=f"**File Name**: `file_name`\n\n**Download Link:** `https://tgddl.anidl.org/dl/{linkx}`", 
-                reply_markup=dl_markup
+                reply_markup=dl_xmarkup
             )
             mid = idx["msg_id"]
             await goat.edit_message_caption(
