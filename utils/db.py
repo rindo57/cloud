@@ -34,5 +34,6 @@ def replace_is_hash_in_db(hash, file_name):
         filter = {"filenamex": fname}
         update = {"$set": {"filenamex": file_name}}
         result = filesdb.update_one(filter, update)
+        return data
     else:
-        pass
+        return None
