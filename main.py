@@ -314,14 +314,15 @@ async def rename_doc(bot, update):
             await goat.edit_message_text(
                 chat_id=user_id,
                 message_id=repl,
-                text=f"**File Name**: `file_name`\n\n**Download Link:** `https://tgddl.anidl.org/dl/{linkx}`", 
+                text=f"**File Name**: `{file_name}`\n\n**Download Link:** `https://tgddl.anidl.org/dl/{linkx}`", 
                 reply_markup=dl_xmarkup
             )
             mid = idx["msg_id"]
             await goat.edit_message_caption(
                 chat_id=-1001895203720,
                 message_id=int(mid),
-                caption=f"`fxname`"
+                caption=f"`{fxname}`",
+                reply_markup=dl_xmarkup
             )
     else:
         update.reply_text("reply to any link I sent with a new file name ~ example: '/rename Naruto - 01'.mkv")
