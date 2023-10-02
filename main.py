@@ -289,7 +289,7 @@ async def main(client, message):
     send = await message.reply_text(f"File Name: `{filenam}`\n\nDownload Link: `https://tgddl.anidl.org/dl/{hash}`", reply_markup=dl_markup)
     msg_id=int(taku.id)
     save_file_in_db(filename, filenam, hash, msg_id)
-@goat.on_message(pyrogram.filters.command(["rename"]))
+@goat.on_message(filters.command(["rename"]))
 async def rename_doc(bot, update):
     if (" " in update.text) and (update.reply_to_message is not None):
         user_id = update.from_user.id
