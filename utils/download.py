@@ -3,8 +3,6 @@ import mimetypes
 
 DL_STATUS = {}
 
-import aiofiles
-import mimetypes
 
 async def download_file(session, hash, url):
     print("Downloading", hash, url)
@@ -23,13 +21,14 @@ async def download_file(session, hash, url):
             print("File size too big")
             return
         if total < 9.9 * 1024 * 1024:
-            DL_STATUS[hash] = {"message": "File size less than 10MB is not allowed"}
+            DL_STATUS[hash] = {"message": "File size lest than 10MB is not allowed"}
             print("File size too small")
             return
 
         headers = response.headers
         if headers.get("Content-Type"):
             type = headers.get("Content-Type")
+
         elif headers.get("content-type"):
             type = headers.get("content-type")
         else:
@@ -48,35 +47,23 @@ async def download_file(session, hash, url):
         else:
             ext = ext.lower().strip(" .")
 
-        # Get the suggested filename from Content-Disposition header
-        filename = None
-        content_disposition = headers.get("Content-Disposition")
-        if content_disposition:
-            parts = content_disposition.split(";")
-            for part in parts:
-                if "filename=" in part:
-                    filename = part.split("filename=")[1].strip(' "')
-
-        # If filename is not found in Content-Disposition, generate one
-        if not filename:
-            filename = hash + "." + ext
-
         done = 0
-        async with aiofiles.open("static/uploads/" + filename + ".temp", "wb") as f:
+        async with aiofiles.open("static/uploads/" + hash + ".temp", "wb") as f:
             async for data in response.content.iter_chunked(1024):
                 DL_STATUS[hash] = {
                     "total": total,
                     "done": done,
                 }
                 done += 1024
+                # print(done)
                 await f.write(data)
 
-        async with aiofiles.open("static/uploads/" + filename + ".temp", "rb") as f:
-            async with aiofiles.open("static/uploads/" + filename, "wb") as f2:
+        async with aiofiles.open("static/uploads/" + hash + ".temp", "rb") as f:
+            async with aiofiles.open("static/uploads/" + hash + "." + ext, "wb") as f2:
                 await f2.write(await f.read())
 
         DL_STATUS[hash] = {"message": "complete"}
-        return filename
+        return ext
 
 
 # import asyncio, aiohttp
