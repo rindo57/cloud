@@ -19,7 +19,7 @@ from string import ascii_letters, digits
 
 from aiohttp import web
 
-users = {"anidl": "anidl@2023#"}
+users = {"anidl": "gr64tq4$23ed"}
 async def basic_auth_middleware(app, handler):
     async def middleware_handler(request):
         auth_header = request.headers.get("Authorization")
@@ -276,7 +276,7 @@ async def main(client, message):
     dl_markup = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(text="Download Link", url=f"https://tgddl.anidl.org/dl/{hash}")
+                InlineKeyboardButton(text="🔗 Download Link", url=f"https://tgddl.anidl.org/dl/{hash}")
             ]
         ]
     )
