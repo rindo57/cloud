@@ -139,7 +139,7 @@ async def remote_upload(request):
 
 async def file_html(request):
     hash = request.match_info["hash"]
-    download_link = f"https://tgddl.anidl.org/dl/{hash}"
+    download_link = f"https://ddlserv1.me.in/dl/{hash}"
     filename = is_hash_in_db(hash)["filename"]
 
     return web.Response(
@@ -276,7 +276,7 @@ async def main(client, message):
     dl_markup = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(text="🔗 Download Link", url=f"https://tgddl.anidl.org/dl/{hash}")
+                InlineKeyboardButton(text="🔗 Download Link", url=f"https://ddlserv1.me.in/dl/{hash}")
             ]
         ]
     )
@@ -286,7 +286,7 @@ async def main(client, message):
         message_id=mssg_id,
         reply_markup=dl_markup
     )
-    send = await message.reply_text(f"**File Name:** `{filenam}`\n\n**Download Link:** `https://tgddl.anidl.org/dl/{hash}`", reply_markup=dl_markup)
+    send = await message.reply_text(f"**File Name:** `{filenam}`\n\n**Download Link:** `https://ddlserv1.me.in/dl/{hash}`", reply_markup=dl_markup)
     msg_id=int(taku.id)
     save_file_in_db(filename, filenam, hash, msg_id)
 @goat.on_message(filters.command(["rename"]))
@@ -299,7 +299,7 @@ async def rename_doc(bot, update):
         jar = await goat.get_messages(user_id, repl)
         hax = jar.text.split("\n\n")[1].split(": ")[1]
         print(hax)
-        linkx = hax.replace("https://tgddl.anidl.org/dl/", "")
+        linkx = hax.replace("https://ddlserv1.me.in/dl/", "")
         idx = replace_is_hash_in_db(linkx, file_name)
         await update.reply_text("Your file has successfully been renamed.")
         dl_xmarkup = InlineKeyboardMarkup(
@@ -314,7 +314,7 @@ async def rename_doc(bot, update):
             await goat.edit_message_text(
                 chat_id=user_id,
                 message_id=repl,
-                text=f"**File Name**: `{file_name}`\n\n**Download Link:** `https://tgddl.anidl.org/dl/{linkx}`", 
+                text=f"**File Name**: `{file_name}`\n\n**Download Link:** `https://ddlserv1.me.in/dl/{linkx}`", 
                 reply_markup=dl_xmarkup
             )
             mid = idx["msg_id"]
