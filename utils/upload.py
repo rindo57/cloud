@@ -22,14 +22,14 @@ async def upload_file_to_channel(hash, filename, extension, orgname):
     START_MARKUP = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(text="🔗Download Link", url=f"https://tgddl.anidl.org/dl/{hash}"),
+                InlineKeyboardButton(text="🔗Download Link", url=f"https://https://anidl.ddlserverv1.me.in/dl/{hash}"),
             ]
         ]
     ) 
     file = await app.send_document(
         -1001895203720,
         f"static/uploads/{hash}.{extension}",
-        caption=f"`{orgname}`\n🔗DDL - https://tgddl.anidl.org/dl/{hash}",
+        caption=f"`{orgname}`\n🔗DDL - https://anidl.ddlserverv1.me.in/dl/{hash}",
         reply_markup=START_MARKUP,
         progress=upload_progress,
         progress_args=(hash,),
