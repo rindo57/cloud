@@ -22,7 +22,7 @@ async def upload_file_to_channel(hash, filename, extension, orgname):
     START_MARKUP = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(text="🔗Download Link", url=f"https://https://anidl.ddlserverv1.me.in/dl/{hash}"),
+                InlineKeyboardButton(text="🔗Download Link", url=f"https://anidl.ddlserverv1.me.in/dl/{hash}"),
             ]
         ]
     ) 
