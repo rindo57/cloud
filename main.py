@@ -42,7 +42,7 @@ async def conditional_auth_middleware(app, handler):
             auth_result = await (await basic_auth_middleware(app, handler))(request)
             return auth_result
         else:
-            return await handler(request)
+            return handler(request)
 
     return middleware_handler
 
