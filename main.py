@@ -227,14 +227,14 @@ async def generate_clients():
     print("Generating Clients")
 
     for i in range(len(BOT_TOKENS)):
-        bot = Client(
+        xot = Client(
             f"bot{i}",
             api_id=API_KEY,
             api_hash=API_HASH,
             bot_token=BOT_TOKENS[i],
         )
-        await bot.start()
-        multi_clients[i] = bot
+        await xot.start()
+        multi_clients[i] = xot
         work_loads[i] = 0
         print(f"Client {i} generated")
 @bot.on_message(
