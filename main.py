@@ -338,7 +338,7 @@ async def start_server():
     delete_cache()
 
     app.router.add_get("/", home)
-    app.router.add_get("/static/{file}", static_files)
+    app.router.add_get("/static/{file}", protected_handler)
     app.router.add_get("/beta/{hash}", download)
     app.router.add_get("/dl/{hash}", downloadx)
     app.router.add_get("/file/{hash}", file_html)
