@@ -49,7 +49,7 @@ async def conditional_auth_middleware(app, handler):
 app = web.Application()
         
 # Apply the basic authentication middleware
-app.middlewares.append(conditional_auth_middleware)
+
 bot = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="5222572158:AAGwMiAMGgj9BmMQdcxn58Cq19stEnoVarI")
 goat = Client("ani", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="6470885647:AAFYGV4BXW0FY4ZspL4lHJ-hlM4-j72xERA")
 
