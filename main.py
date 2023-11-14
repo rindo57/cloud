@@ -42,7 +42,7 @@ async def conditional_auth_middleware(app, handler):
             auth_result = await (await basic_auth_middleware(app, handler))(request)
             return auth_result
         else:
-            return handler(request)
+            return await handler(request)
 
     return middleware_handler
 
@@ -68,7 +68,6 @@ async def protected_handler(request):
         content_type="text/html"
     )
     return response
-    
 async def upload_file(request):
     global UPLOAD_TASK
 
@@ -226,14 +225,14 @@ async def generate_clients():
     print("Generating Clients")
 
     for i in range(len(BOT_TOKENS)):
-        xot = Client(
+        bot = Client(
             f"bot{i}",
             api_id=API_KEY,
             api_hash=API_HASH,
             bot_token=BOT_TOKENS[i],
         )
-        await xot.start()
-        multi_clients[i] = xot
+        await bot.start()
+        multi_clients[i] = bot
         work_loads[i] = 0
         print(f"Client {i} generated")
 @bot.on_message(
