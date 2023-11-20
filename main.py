@@ -272,7 +272,7 @@ async def main(client, message):
     file_info = await client.get_messages(chat_id=user_id, message_ids=mssg_id)
     filename = file_info.document.file_name
     filenam = file_info.document.file_name
-    hash = "".join([random.choice(ascii_letters + digits) for n in range(100)])
+    hash = "".join([random.choice(ascii_letters + digits) for n in range(50)])
     dl_markup = InlineKeyboardMarkup(
         [
             [
@@ -284,6 +284,7 @@ async def main(client, message):
         chat_id=anidl_ch,
         from_chat_id=user_id,
         message_id=mssg_id,
+        caption = f"https://anidl.ddlserverv1.me.in/dl/{hash}"
         reply_markup=dl_markup
     )
     send = await message.reply_text(f"**File Name:** `{filenam}`\n\n**Download Link:** `https://anidl.ddlserverv1.me.in/dl/{hash}`", reply_markup=dl_markup)
