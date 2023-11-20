@@ -271,6 +271,11 @@ async def main(client, message):
     mssg_id = int(message.id)
     file_info = await client.get_messages(chat_id=user_id, message_ids=mssg_id)
     filname = message.document.file_name
+    anidl = filename.replace("AniDL_", "[AniDL] ")
+    reas = anidl.replace("_", ".")
+    reax = reas.replace("1080p.BDDual.AudioIamTsukasa", "1080p.BD.Dual.Audio.IamTsukasa")
+    reax = reax.replace("720p.BDDual.AudioIamTsukasa", "720p.BD.Dual.Audio.IamTsukasa")
+    reax = reax.replace("480p.BDDual.AudioIamTsukasa", "480p.BD.Dual.Audio.IamTsukasa")
     print(filname)
     filename = file_info.document.file_name
     filenam = file_info.document.file_name
@@ -286,12 +291,12 @@ async def main(client, message):
         chat_id=anidl_ch,
         from_chat_id=user_id,
         message_id=mssg_id,
-        caption = f"`{filname} -> `https://anidl.ddlserverv1.me.in/dl/{hash}`",
+        caption = f"`{filname} -> https://anidl.ddlserverv1.me.in/dl/{hash}`",
         reply_markup=dl_markup
     )
     send = await message.reply_text(f"**File Name:** `{filenam}`\n\n**Download Link:** `https://anidl.ddlserverv1.me.in/dl/{hash}`", reply_markup=dl_markup)
     msg_id=int(taku.id)
-    save_file_in_db(filename, filenam, hash, msg_id)
+    save_file_in_db(reax, reax, hash, msg_id)
 @goat.on_message(filters.command(["rename"]))
 async def rename_doc(bot, update):
     if (" " in update.text) and (update.reply_to_message is not None):
@@ -324,7 +329,7 @@ async def rename_doc(bot, update):
             await goat.edit_message_caption(
                 chat_id=-1001895203720,
                 message_id=int(mid),
-                caption=f"`{fxname}`\n\n`https://anidl.ddlserverv1.me.in/dl/{linkx}`",
+                caption=f"`{fxname} -> https://anidl.ddlserverv1.me.in/dl/{linkx}`",
                 reply_markup=dl_xmarkup
             )
     else:
