@@ -271,7 +271,7 @@ async def main(client, message):
     mssg_id = int(message.id)
     file_info = await client.get_messages(chat_id=user_id, message_ids=mssg_id)
     filname = message.document.file_name
-    anidl = filename.replace("AniDL_", "[AniDL] ")
+    anidl = filname.replace("AniDL_", "[AniDL] ")
     reas = anidl.replace("_", ".")
     reax = reas.replace("1080p.BDDual.AudioIamTsukasa", "1080p.BD.Dual.Audio.IamTsukasa")
     reax = reax.replace("720p.BDDual.AudioIamTsukasa", "720p.BD.Dual.Audio.IamTsukasa")
