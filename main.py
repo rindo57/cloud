@@ -291,7 +291,7 @@ async def main(client, message):
         chat_id=anidl_ch,
         from_chat_id=user_id,
         message_id=mssg_id,
-        caption = f"`{filname} -> https://anidl.ddlserverv1.me.in/dl/{hash}`",
+        caption = f"`{reax} -> https://anidl.ddlserverv1.me.in/dl/{hash}`",
         reply_markup=dl_markup
     )
     send = await message.reply_text(f"**File Name:** `{filenam}`\n\n**Download Link:** `https://anidl.ddlserverv1.me.in/dl/{hash}`", reply_markup=dl_markup)
