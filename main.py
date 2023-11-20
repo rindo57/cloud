@@ -270,7 +270,7 @@ async def main(client, message):
     anidl_ch = -1001895203720
     mssg_id = int(message.id)
     file_info = await client.get_messages(chat_id=user_id, message_ids=mssg_id)
-    filname = await message.document.file_name
+    filname = message.document.file_name
     print(filname)
     filename = file_info.document.file_name
     filenam = file_info.document.file_name
