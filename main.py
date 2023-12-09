@@ -1,3 +1,4 @@
+
 from utils.download import DL_STATUS
 import aiohttp
 import base64
@@ -291,7 +292,7 @@ async def main(client, message):
         chat_id=anidl_ch,
         from_chat_id=user_id,
         message_id=mssg_id,
-        caption = f"`{reax} -> https://anidl.ddlserverv1.me.in/dl/{hash}`",
+        caption = f"`{reax}: https://anidl.ddlserverv1.me.in/dl/{hash}`",
         reply_markup=dl_markup
     )
     send = await message.reply_text(f"**File Name:** `{filenam}`\n\n**Download Link:** `https://anidl.ddlserverv1.me.in/dl/{hash}`", reply_markup=dl_markup)
@@ -329,7 +330,7 @@ async def rename_doc(bot, update):
             await goat.edit_message_caption(
                 chat_id=-1001895203720,
                 message_id=int(mid),
-                caption=f"`{fxname} : kihttps://anidl.ddlserverv1.me.in/dl/{linkx}`",
+                caption=f"`{fxname}: https://anidl.ddlserverv1.me.in/dl/{linkx}`",
                 reply_markup=dl_xmarkup
             )
     else:
