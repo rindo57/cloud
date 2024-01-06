@@ -261,7 +261,7 @@ async def main(client, message):
     await client.edit_message_reply_markup(
         chat_id=message.chat.id,
         message_id=message.id,
-        reply_markup=inline_reply_markup
+        reply_markup=dl_markup
     )
     save_file_in_db(filename, filenam, hash, msg_id)
     
