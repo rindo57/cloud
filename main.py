@@ -52,8 +52,6 @@ app = web.Application()
 # Apply the basic authentication middleware
 app.middlewares.append(conditional_auth_middleware)
 bot = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="5222572158:AAGwMiAMGgj9BmMQdcxn58Cq19stEnoVarI")
-goat = Client("ani", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="6470885647:AAFYGV4BXW0FY4ZspL4lHJ-hlM4-j72xERA")
-
 def render_template(name):
     with open(f"templates/{name}") as f:
         return f.read()
@@ -253,92 +251,24 @@ async def main(client, message):
     filename = file_info.document.file_name
     filenam = file_info.document.file_name
     hash = "".join([random.choice(ascii_letters + digits) for n in range(50)])
+    dl_markup = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(text="🔗 Download Link", url=f"https://animxt.fun/beta/{hash}")
+            ]
+        ]
+    )
+    await client.edit_message_reply_markup(
+        chat_id=message.chat.id,
+        message_id=message.id,
+        reply_markup=inline_reply_markup
+    )
     save_file_in_db(filename, filenam, hash, msg_id)
     
 #anidl
 
-@goat.on_message(
-    filters.private
-    & (
-        filters.document
-        | filters.video
-        | filters.audio
-    ),
-    group=4,
-)
-async def main(client, message):
-    user_id = message.from_user.id
-    anidl_ch = -1001895203720
-    mssg_id = int(message.id)
-    file_info = await client.get_messages(chat_id=user_id, message_ids=mssg_id)
-    filname = message.document.file_name
-    anidl = filname.replace("AniDL_", "[AniDL] ")
-    reas = anidl.replace("_", ".")
-    reax = reas.replace("1080p.BDDual.AudioIamTsukasa", "1080p.BD.Dual.Audio.IamTsukasa")
-    reax = reax.replace("720p.BDDual.AudioIamTsukasa", "720p.BD.Dual.Audio.IamTsukasa")
-    reax = reax.replace("480p.BDDual.AudioIamTsukasa", "480p.BD.Dual.Audio.IamTsukasa")
-    print(filname)
-    filename = file_info.document.file_name
-    filenam = file_info.document.file_name
-    hash = "".join([random.choice(ascii_letters + digits) for n in range(50)])
-    dl_markup = InlineKeyboardMarkup(
-        [
-            [
-                InlineKeyboardButton(text="🔗 Download Link", url=f"https://anidl.ddlserverv1.me.in/dl/{hash}")
-            ]
-        ]
-    )
-    taku = await goat.copy_message(
-        chat_id=anidl_ch,
-        from_chat_id=user_id,
-        message_id=mssg_id,
-        caption = f"`{reax}: https://anidl.ddlserverv1.me.in/dl/{hash}`",
-        reply_markup=dl_markup
-    )
-    send = await message.reply_text(f"**File Name:** `{filenam}`\n\n**Download Link:** `https://anidl.ddlserverv1.me.in/dl/{hash}`", reply_markup=dl_markup)
-    msg_id=int(taku.id)
-    save_file_in_db(reax, reax, hash, msg_id)
-@goat.on_message(filters.command(["rename"]))
-async def rename_doc(bot, update):
-    if (" " in update.text) and (update.reply_to_message is not None):
-        user_id = update.from_user.id
-        mesid = update.id
-        file_name = " ".join(update.command[1:])
-        repl = update.reply_to_message_id
-        jar = await goat.get_messages(user_id, repl)
-        hax = jar.text.split("\n\n")[1].split(": ")[1]
-        print(hax)
-        linkx = hax.replace("https://anidl.ddlserverv1.me.in/dl/", "")
-        idx = replace_is_hash_in_db(linkx, file_name)
-        await update.reply_text("Your file has successfully been renamed.")
-        dl_xmarkup = InlineKeyboardMarkup(
-            [
-                [
-                InlineKeyboardButton(text="🔗 Download Link", url=hax)
-                ]
-            ]
-        )
-        if idx:
-            fxname = idx["filenamex"]
-            await goat.edit_message_text(
-                chat_id=user_id,
-                message_id=repl,
-                text=f"**File Name**: `{file_name}`\n\n**Download Link:** `https://anidl.ddlserverv1.me.in/dl/{linkx}`", 
-                reply_markup=dl_xmarkup
-            )
-            mid = idx["msg_id"]
-            await goat.edit_message_caption(
-                chat_id=-1001895203720,
-                message_id=int(mid),
-                caption=f"`{fxname}: https://anidl.ddlserverv1.me.in/dl/{linkx}`",
-                reply_markup=dl_xmarkup
-            )
-    else:
-        update.reply_text("reply to any link I sent with a new file name ~ example: '/rename Naruto - 01'.mkv")
 
-        
 
-    
 async def start_server():
     global aiosession
     print("Starting Server")
@@ -363,7 +293,6 @@ async def start_server():
     print("Starting Client Generator")
     loop.create_task(generate_clients())
     await bot.start()
-    await goat.start()
     await server.setup()
     print("Server Started")
     await web.TCPSite(server, port=80).start()
