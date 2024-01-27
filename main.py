@@ -254,7 +254,7 @@ async def main(client, message):
     dl_markup = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(text="🔗 Download Link", url=f"https://animxt.fun/beta/{hash}")
+                InlineKeyboardButton(text="🔗 Download Link", url=f"https://ddl.animxt.fun/beta/{hash}")
             ]
         ]
     )
