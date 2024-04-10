@@ -235,7 +235,7 @@ async def generate_clients():
         work_loads[i] = 0
         print(f"Client {i} generated")
 @bot.on_message(
-    filters.chat(-1001642923224)
+    filters.chat(-1001290476494)
     & (
         filters.document
         | filters.video
@@ -244,7 +244,7 @@ async def generate_clients():
     group=4,
 )
 async def main(client, message):
-    anidl_ch = -1001642923224
+    anidl_ch = -1001290476494
     msg_id = int(message.id)
     strmsg_id = str(message.id)
     file_info = await client.get_messages(chat_id=anidl_ch, message_ids=msg_id)
@@ -254,7 +254,7 @@ async def main(client, message):
     dl_markup = InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(text="🔗 Download Link", url=f"https://ddl.animxt.fun/beta/{hash}")
+                InlineKeyboardButton(text="🔗 Download Link", url=f"https://robot.ddlserverv1.me.in/beta/{hash}")
             ]
         ]
     )
