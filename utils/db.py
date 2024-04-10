@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 print("Connecting to database...")
 client = MongoClient(
-    "mongodb+srv://hevc:sucks@cluster0.mdnim6a.mongodb.net/?retryWrites=true&w=majority"
+    "mongodb+srv://anidl:encodes@cluster0.oobfx33.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 )
 
 db = client["anidl"]
