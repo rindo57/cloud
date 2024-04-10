@@ -234,7 +234,7 @@ async def generate_clients():
         multi_clients[i] = bot
         work_loads[i] = 0
         print(f"Client {i} generated")
-@botx.on_message(
+@bot.on_message(
     filters.chat(-1001290476494)
     & (
         filters.document
