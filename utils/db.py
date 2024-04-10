@@ -4,7 +4,7 @@ client = MongoClient(
     "mongodb+srv://hevc:sucks@cluster0.mdnim6a.mongodb.net/?retryWrites=true&w=majority"
 )
 
-db = client["techzcloud"]
+db = client["anidl"]
 filesdb = db["files"]
 print("Connected to database...")
 
