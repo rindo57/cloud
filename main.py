@@ -295,7 +295,7 @@ async def start_server():
     await botx.start()
     await server.setup()
     print("Server Started")
-    await web.TCPSite(server, port=8085).start()
+    await web.TCPSite(server, port=8084).start()
     await idle()
 
 
