@@ -51,7 +51,7 @@ app = web.Application()
         
 # Apply the basic authentication middleware
 app.middlewares.append(conditional_auth_middleware)
-bot = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="5222572158:AAGwMiAMGgj9BmMQdcxn58Cq19stEnoVarI")
+botx = Client("anime_bot", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="5222572158:AAGwMiAMGgj9BmMQdcxn58Cq19stEnoVarI")
 def render_template(name):
     with open(f"templates/{name}") as f:
         return f.read()
@@ -234,7 +234,7 @@ async def generate_clients():
         multi_clients[i] = bot
         work_loads[i] = 0
         print(f"Client {i} generated")
-@bot.on_message(
+@botx.on_message(
     filters.chat(-1001290476494)
     & (
         filters.document
@@ -292,7 +292,7 @@ async def start_server():
     loop.create_task(upload_task_spawner())
     print("Starting Client Generator")
     loop.create_task(generate_clients())
-    await bot.start()
+    await botx.start()
     await server.setup()
     print("Server Started")
     await web.TCPSite(server, port=8085).start()
