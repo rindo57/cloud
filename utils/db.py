@@ -12,7 +12,7 @@ client2 = MongoClient(
     "mongodb://admin:secretpassword@mongodxx.ddlserverv1.me.in:27017/"
 )
 
-db2 = client2["anidl"]
+db2 = client2["techzcloud"]
 filesdb2 = db2["files"]
 print("Connected to database...")
 
