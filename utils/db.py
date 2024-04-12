@@ -8,6 +8,14 @@ db = client["anidl"]
 filesdb = db["files"]
 print("Connected to database...")
 
+client2 = MongoClient(
+    "mongodb+srv://admin:secretpassword@my-mongo:27017"
+)
+
+db2 = client["anidl"]
+filesdb2 = db2["files"]
+print("Connected to database...")
+
 def save_file_in_db(orgname, filename, hash, msg_id=None):
     filesdb.update_one(
         {
@@ -21,6 +29,12 @@ def save_file_in_db(orgname, filename, hash, msg_id=None):
 
 def is_hash_in_db(hash):
     data = filesdb.find_one({"hash": hash})
+    if data:
+        return data
+    else:
+        return None
+def is_hash_in_db(hash):
+    data = filesdb2.find_one({"hash": hash})
     if data:
         return data
     else:
