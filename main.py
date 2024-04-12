@@ -10,7 +10,7 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, 
 from pyrogram import Client, idle, filters
 from werkzeug.utils import secure_filename
 import os
-from utils.db import is_hash_in_db, save_file_in_db, replace_is_hash_in_db
+from utils.db import is_hash_in_db, is_hash_in_db2, save_file_in_db, replace_is_hash_in_db
 from utils.file import allowed_file, delete_cache, get_file_hash
 from utils.tgstreamer import media_streamer, media_streamerx
 from utils.upload import upload_file_to_channel
@@ -190,7 +190,7 @@ async def remote_status(request):
 
 async def download(request: web.Request):
     hash = request.match_info["hash"]
-    id = is_hash_in_db(hash)
+    id = is_hash_in_db2(hash)
     if id:
         fname = id["filenamex"]
         id = id["msg_id"]
@@ -234,6 +234,7 @@ async def generate_clients():
         multi_clients[i] = bot
         work_loads[i] = 0
         print(f"Client {i} generated")
+'''
 @bot.on_message(
     filters.chat(-1001290476494)
     & (
@@ -264,7 +265,7 @@ async def main(client, message):
         reply_markup=dl_markup
     )
     save_file_in_db(filename, filenam, hash, msg_id)
-    
+'''    
 #anidl
 
 
