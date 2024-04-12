@@ -9,10 +9,10 @@ filesdb = db["files"]
 print("Connected to database...")
 
 client2 = MongoClient(
-    "mongodb+srv://admin:secretpassword@my-mongo:27017"
+    "mongodb://admin:secretpassword@mongodxx.ddlserverv1.me.in:27017/"
 )
 
-db2 = client["anidl"]
+db2 = client2["anidl"]
 filesdb2 = db2["files"]
 print("Connected to database...")
 
