@@ -33,7 +33,7 @@ def is_hash_in_db(hash):
         return data
     else:
         return None
-def is_hash_in_db(hash):
+def is_hash_in_db2(hash):
     data = filesdb2.find_one({"hash": hash})
     if data:
         return data
