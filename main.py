@@ -190,7 +190,7 @@ async def remote_status(request):
 
 async def download(request: web.Request):
     hash = request.match_info["hash"]
-    id = is_hash_in_db2(hash)
+    id = is_hash_in_db(hash)
     if id:
         fname = id["filenamex"]
         id = id["msg_id"]
@@ -198,7 +198,7 @@ async def download(request: web.Request):
 
 async def downloadx(request: web.Request):
     hash = request.match_info["hash"]
-    id = is_hash_in_db(hash)
+    id = is_hash_in_db2(hash)
     if id:
         fname = id["filenamex"]
         id = id["msg_id"]
