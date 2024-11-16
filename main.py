@@ -28,8 +28,9 @@ async def lifespan(app: FastAPI):
 
     yield
 
-
 app = FastAPI(docs_url=None, redoc_url=None, lifespan=lifespan)
+logger = Logger(__name__)
+
 UPLOAD_TASK = []
 users = {"anidl": "gr64tq4$23ed"}
 security = HTTPBasic()
