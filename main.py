@@ -43,8 +43,7 @@ async def middleware_handler(request):
             return auth_result
         else:
             return await handler(request)
-
-    return middleware_handler
+            return middleware_handler
 
 app = web.Application()
         
