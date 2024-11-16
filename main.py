@@ -1,206 +1,123 @@
 
+from fastapi import FastAPI, Depends, HTTPException, UploadFile, Form
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from pydantic import BaseModel
+from typing import Optional
 from utils.download import DL_STATUS
-import aiohttp
-import base64
-from config import *
 from utils.remote_upload import start_remote_upload
-from utils.tgstreamer import work_loads, multi_clients
-import asyncio
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InputMediaPhoto
-from pyrogram import Client, idle, filters
-from werkzeug.utils import secure_filename
-import os
-from utils.db import is_hash_in_db, is_hash_in_db2, save_file_in_db, replace_is_hash_in_db
 from utils.file import allowed_file, delete_cache, get_file_hash
+from utils.db import is_hash_in_db, is_hash_in_db2, save_file_in_db, replace_is_hash_in_db
+from utils.upload import upload_file_to_channel, PROGRESS
+from utils.clients import initialize_clients
 from utils.tgstreamer import media_streamer, media_streamerx
-from utils.upload import upload_file_to_channel
-from utils.upload import PROGRESS
-import random
-from string import ascii_letters, digits
+import asyncio
+import os
+import base64
+from werkzeug.utils import secure_filename
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Reset the cache directory, delete cache files
+    reset_cache_dir()
 
-from aiohttp import web
+    # Initialize the clients
+    await initialize_clients()
 
+    # Start the website auto ping task
+    asyncio.create_task(auto_ping_website())
+
+    yield
+
+
+app = FastAPI(docs_url=None, redoc_url=None, lifespan=lifespan)
+UPLOAD_TASK = []
 users = {"anidl": "gr64tq4$23ed"}
-async def basic_auth_middleware(app, handler):
-    async def middleware_handler(request):
-        auth_header = request.headers.get("Authorization")
-        if auth_header is None or not auth_header.startswith("Basic "):
-            return web.Response(text="Unauthorized", status=401, headers={"WWW-Authenticate": "Basic realm='Restricted Area'"})
+security = HTTPBasic()
 
-        auth_decoded = base64.b64decode(auth_header[6:]).decode()
-        username, password = auth_decoded.split(":")
-
-        if users.get(username) == password:
-            return await handler(request)
-
-        return web.Response(text="Unauthorized", status=401, headers={"WWW-Authenticate": "Basic realm='Restricted Area'"})
-
-    return middleware_handler
-async def conditional_auth_middleware(app, handler):
-    async def middleware_handler(request):
-        if request.path == "/":
-            auth_result = await (await basic_auth_middleware(app, handler))(request)
-            return auth_result
-        else:
-            return await handler(request)
-    return middleware_handler
-
-app = web.Application()
-        
-# Apply the basic authentication middleware
-app.middlewares.append(conditional_auth_middleware)
-goat = Client("ani", api_id=3845818, api_hash="95937bcf6bc0938f263fc7ad96959c6d", bot_token="6470885647:AAFYGV4BXW0FY4ZspL4lHJ-hlM4-j72xERA")
+# Template rendering
 def render_template(name):
     with open(f"templates/{name}") as f:
         return f.read()
-async def protected_handler(request):
-    # Check authentication before serving content
-    authenticated = await basic_auth_middleware(None, lambda req: web.Response())
-    if isinstance(authenticated, web.Response) and authenticated.status != 200:
-        return authenticated
 
-    # Authentication successful, serve content with content_type="text/html"
-    response = web.Response(
-        text=render_template("minindex.html"),
-        content_type="text/html"
-    )
-    return response
-async def upload_file(request):
+# Basic authentication
+def authenticate(credentials: HTTPBasicCredentials = Depends(security)):
+    username = credentials.username
+    password = credentials.password
+    if users.get(username) != password:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+@app.get("/", response_class=HTMLResponse)
+def protected_handler(credentials: HTTPBasicCredentials = Depends(authenticate)):
+    return HTMLResponse(render_template("minindex.html"))
+
+@app.post("/upload")
+async def upload_file(file: UploadFile):
     global UPLOAD_TASK
+    filename = file.filename
 
-    reader = await request.multipart()
-    field = await reader.next()
-    filename = field.filename
-    orgname = field.filename
-    if field is None:
-        return web.Response(text="No file uploaded.", content_type="text/plain")
+    if not allowed_file(filename):
+        raise HTTPException(status_code=400, detail="File type not allowed")
 
-    if allowed_file(filename):
-        if filename == "":
-            return web.Response(
-                text="No file selected.", content_type="text/plain", status=400
-            )
+    filename = secure_filename(filename)
+    extension = filename.rsplit(".", 1)[1]
+    hash_value = get_file_hash()
 
-        filename = secure_filename(filename)
-        extension = filename.rsplit(".", 1)[1]
-        hash = get_file_hash()
+    while is_hash_in_db(hash_value):
+        hash_value = get_file_hash()
 
-        while is_hash_in_db(hash):
-            hash = get_file_hash()
-            print(hash)
+    try:
+        with open(os.path.join("static/uploads", f"{hash_value}.{extension}"), "wb") as f:
+            while chunk := await file.read(1024):
+                f.write(chunk)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error saving file: {str(e)}")
 
-        try:
-            with open(
-                os.path.join("static/uploads", hash + "." + extension), "wb"
-            ) as f:
-                while True:
-                    chunk = await field.read_chunk()
-                    if not chunk:
-                        break
-                    f.write(chunk)
-        except Exception as e:
-            return web.Response(
-                text=f"Error saving file: {str(e)}",
-                status=500,
-                content_type="text/plain",
-            )
+    UPLOAD_TASK.append((hash_value, filename, extension, file.filename))
+    return {"hash": hash_value}
 
-
-        UPLOAD_TASK.append((hash, filename, extension, orgname))
-        return web.Response(text=hash, content_type="text/plain", status=200)
-    else:
-        return web.Response(
-            text="File type not allowed", status=400, content_type="text/plain"
-        )
-
-
-
-
-async def bot_status(_):
-    json = work_loads
-    return web.json_response(json)
-
-async def remote_upload(request):
-    global aiosession
-    hash = get_file_hash()
-    print(request.headers)
-    link = request.headers["url"]
-
-    while is_hash_in_db(hash):
-        hash = get_file_hash()
-
-    print("Remote upload", hash)
-    loop.create_task(start_remote_upload(aiosession, hash, link))
-    return web.Response(text=hash, content_type="text/plain", status=200)
-
-
-async def file_html(request):
-    hash = request.match_info["hash"]
-    download_link = f"https://anidl.ddlserverv1.me.in/dl/{hash}"
-    filename = is_hash_in_db(hash)["filename"]
-
-    return web.Response(
-        text=render_template("minfile.html")
-        .replace("FILE_NAME", filename)
-        .replace("DOWNLOAD_LINK", download_link),
-        content_type="text/html",
-    )
-
-
-async def static_files(request):
-    return web.FileResponse(f"static/{request.match_info['file']}")
-
-
-async def process(request):
-    global PROGRESS
-    hash = request.match_info["hash"]
-
+@app.get("/process/{hash}")
+async def process(hash: str):
     data = PROGRESS.get(hash)
     if data:
-        if data.get("message"):
-            data = {"message": data["message"]}
-            return web.json_response(data)
-        else:
-            data = {"current": data["done"], "total": data["total"]}
-            return web.json_response(data)
+        return JSONResponse({"message": data.get("message", ""), "current": data.get("done", 0), "total": data.get("total", 0)})
+    raise HTTPException(status_code=404, detail="Not Found")
 
-    else:
-        return web.Response(text="Not Found", status=404, content_type="text/plain")
+@app.get("/dl/{hash}")
+async def download(hash: str):
+    db_entry = is_hash_in_db2(hash)
+    if db_entry:
+        return await media_streamerx(hash, db_entry["msg_id"], db_entry["filenamex"])
+    raise HTTPException(status_code=404, detail="File Not Found")
 
+@app.get("/file/{hash}", response_class=HTMLResponse)
+async def file_html(hash: str):
+    db_entry = is_hash_in_db(hash)
+    if db_entry:
+        download_link = f"https://anidl.ddlserverv1.me.in/dl/{hash}"
+        return render_template("minfile.html").replace("FILE_NAME", db_entry["filename"]).replace("DOWNLOAD_LINK", download_link)
+    raise HTTPException(status_code=404, detail="File Not Found")
 
-async def remote_status(request):
-    global DL_STATUS
-    print(DL_STATUS)
-    hash = request.match_info["hash"]
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(upload_task_spawner())
 
-    data = DL_STATUS.get(hash)
-    if data:
-        if data.get("message"):
-            data = {"message": data["message"]}
-            return web.json_response(data)
-        else:
-            data = {"current": data["done"], "total": data["total"]}
-            return web.json_response(data)
+async def upload_task_spawner():
+    while True:
+        if UPLOAD_TASK:
+            task = UPLOAD_TASK.pop(0)
+            asyncio.create_task(upload_file_to_channel(*task))
+        await asyncio.sleep(1)
 
-    else:
-        return web.Response(text="Not Found", status=404, content_type="text/plain")
+@app.post("/remote-upload")
+async def remote_upload(url: str = Form(...)):
+    hash_value = get_file_hash()
 
+    while is_hash_in_db(hash_value):
+        hash_value = get_file_hash()
 
-async def download(request: web.Request):
-    hash = request.match_info["hash"]
-    id = is_hash_in_db(hash)
-    if id:
-        fname = id["filenamex"]
-        id = id["msg_id"]
-        return await media_streamer(request, id, fname)
+    await start_remote_upload(None, hash_value, url)
+    return {"hash": hash_value}
 
-async def downloadx(request: web.Request):
-    hash = request.match_info["hash"]
-    id = is_hash_in_db2(hash)
-    if id:
-        fname = id["filenamex"]
-        id = id["msg_id"]
-        return await media_streamerx(request, id, fname)
         
 UPLOAD_TASK = []
 
@@ -347,36 +264,3 @@ async def main(client, message):
 
 
 
-async def start_server():
-    global aiosession
-    print("Starting Server")
-    delete_cache()
-
-    app.router.add_get("/", protected_handler)
-    app.router.add_get("/static/{file}", static_files)
-    app.router.add_get("/beta/{hash}", download)
-    app.router.add_get("/dl/{hash}", downloadx)
-    app.router.add_get("/file/{hash}", file_html)
-    app.router.add_post("/upload", upload_file)
-    app.router.add_get("/process/{hash}", process)
-    app.router.add_post("/remote_upload", remote_upload)
-    app.router.add_get("/remote_status/{hash}", remote_status)
-    app.router.add_get("/bot_status", bot_status)
-
-    aiosession = aiohttp.ClientSession()
-    server = web.AppRunner(app)
-
-    print("Starting Upload Task Spawner")
-    loop.create_task(upload_task_spawner())
-    print("Starting Client Generator")
-    loop.create_task(generate_clients())
-    await goat.start()
-    await server.setup()
-    print("Server Started")
-    await web.TCPSite(server, port=80).start()
-    await idle()
-
-
-if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(start_server())
