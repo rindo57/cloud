@@ -36,14 +36,14 @@ async def basic_auth_middleware(app, handler):
         return web.Response(text="Unauthorized", status=401, headers={"WWW-Authenticate": "Basic realm='Restricted Area'"})
 
     return middleware_handler
-   # async def conditional_auth_middleware(app, handler):
-async def middleware_handler(request):
+async def conditional_auth_middleware(app, handler):
+    async def middleware_handler(request):
         if request.path == "/":
             auth_result = await (await basic_auth_middleware(app, handler))(request)
             return auth_result
         else:
             return await handler(request)
-            return middleware_handler
+    return middleware_handler
 
 app = web.Application()
         
