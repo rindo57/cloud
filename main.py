@@ -6,6 +6,8 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel
 from typing import Optional
 from utils.download import DL_STATUS
+from utils.logger import Logger
+
 from utils.remote_upload import start_remote_upload
 from utils.file import allowed_file, delete_cache, get_file_hash
 from utils.db import is_hash_in_db, is_hash_in_db2, save_file_in_db, replace_is_hash_in_db
