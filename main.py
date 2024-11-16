@@ -21,7 +21,7 @@ from werkzeug.utils import secure_filename
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Reset the cache directory, delete cache files
-    reset_cache_dir()
+    #reset_cache_dir()
 
     # Initialize the clients
     await initialize_clients()
