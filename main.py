@@ -122,7 +122,7 @@ async def remote_upload(url: str = Form(...)):
     await start_remote_upload(None, hash_value, url)
     return {"hash": hash_value}
 
-        
+'''  
 UPLOAD_TASK = []
 
 
@@ -233,7 +233,6 @@ async def rename_doc(bot, update):
     else:
         update.reply_text("reply to any link I sent with a new file name ~ example: '/rename Naruto - 01'.mkv")
 
-'''
 @bot.on_message(
     filters.chat(-1001290476494)
     & (
